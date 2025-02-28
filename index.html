@@ -260,7 +260,7 @@
 }
 /* Hide buttons on screens 768px and wider (Desktop) */
 @media (min-width: 768px) {
-
+    #toggle-music,
     #toggle-instructions {
         display: none;
     }
@@ -823,11 +823,28 @@ window.addEventListener('load', () => {
 });
 
 let bgMusic = document.getElementById("bg-music");
-window.onload = () => {
+
+// Function to play music after user interaction
+function enableAudio() {
     if (bgMusic) {
-        bgMusic.play();
+        bgMusic.play().then(() => {
+            console.log("Music started!");
+        }).catch(error => {
+            console.log("Autoplay prevented:", error);
+        });
     }
+
+    // Remove event listener after first interaction
+    document.removeEventListener("click", enableAudio);
+    document.removeEventListener("touchstart", enableAudio);
+}
+
+// Play music only after user clicks or touches the screen
+window.onload = () => {
+    document.addEventListener("click", enableAudio);
+    document.addEventListener("touchstart", enableAudio);
 };
+
 // Get the toggle button
 const toggleMusicButton = document.getElementById("toggle-music");
 
