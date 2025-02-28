@@ -268,6 +268,7 @@
 
 /* Show buttons only on mobile */
 @media (max-width: 767px) {
+    #toggle-music,
     #toggle-instructions {
         display: none;
     }
@@ -275,6 +276,24 @@
     #toggle-instructions {
         left: 100px; /* Separate position from music button */
     }
+}
+#play-music {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #0088cc;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 0 10px rgba(0, 136, 204, 0.7);
+    z-index: 101;
+}
+
+#play-music:hover {
+    background: #00aaff;
 }
 
     
@@ -302,6 +321,8 @@
 
     <button id="toggle-instructions">‎ </button>
     <button id="toggle-music">Music: ON</button>
+    <button id="play-music">▶ Play Music</button>
+
     <div id="jarvis-instructions">
         <p>🔼 Up Arrow - Move Forward</p>
         <p>🔽 Down Arrow - Move Backward</p>
@@ -822,22 +843,6 @@ window.addEventListener('load', () => {
     });
 });
 
-let bgMusic = document.getElementById("bg-music");
-
-// Function to play music after user interaction
-function enableAudio() {
-    if (bgMusic) {
-        bgMusic.play().then(() => {
-            console.log("Music started!");
-        }).catch(error => {
-            console.log("Autoplay prevented:", error);
-        });
-    }
-
-    // Remove event listener after first interaction
-    document.removeEventListener("click", enableAudio);
-    document.removeEventListener("touchstart", enableAudio);
-}
 
 // Play music only after user clicks or touches the screen
 window.onload = () => {
@@ -905,6 +910,23 @@ document.addEventListener("touchend", () => {
     isDragging = false;
 });
 
+let bgMusic = document.getElementById("bg-music");
+let playMusicButton = document.getElementById("play-music");
+
+// Function to play music when the button is clicked
+function playMusic() {
+    if (bgMusic) {
+        bgMusic.play().then(() => {
+            console.log("Music started!");
+            playMusicButton.style.display = "none"; // Hide the button after playing
+        }).catch(error => {
+            console.log("Music play failed:", error);
+        });
+    }
+}
+
+// Add event listener to the Play Music button
+playMusicButton.addEventListener("click", playMusic);
 
 
 
