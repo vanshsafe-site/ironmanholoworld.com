@@ -268,7 +268,6 @@
 
 /* Show buttons only on mobile */
 @media (max-width: 767px) {
-    #toggle-music,
     #toggle-instructions {
         display: none;
     }
@@ -277,23 +276,49 @@
         left: 100px; /* Separate position from music button */
     }
 }
-#play-music {
+/* 🎵 Default Music Player (Top Center on Desktop) */
+#audio-player {
     position: absolute;
     top: 10px;
-    right: 10px;
-    background: #0088cc;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    box-shadow: 0 0 10px rgba(0, 136, 204, 0.7);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 20, 40, 0.8); /* Dark Transparent Background */
+    border: 2px solid #00c3ff; /* J.A.R.V.I.S. Blue Outline */
+    box-shadow: 0 0 10px #00c3ff; /* Glowing Effect */
+    padding: 10px;
+    border-radius: 12px;
     z-index: 101;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-#play-music:hover {
-    background: #00aaff;
+/* 📱 Small Player on Mobile (Bottom-Right) */
+@media (max-width: 767px) {
+    #audio-player {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        left: auto;
+        transform: none;
+        width: 120px;
+        height: 40px;
+        padding: 5px;
+        border-radius: 8px;
+        box-shadow: 0 0 8px #00c3ff;
+        background: rgba(0, 10, 30, 0.9); /* Darker J.A.R.V.I.S. Blue */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+/* 🎛️ Style the Audio Controls */
+#audio-player audio {
+    filter: invert(1) brightness(1.2) contrast(1.2); /* Cool Neon Effect */
+    border-radius: 8px;
+    width: 100px; /* Smaller controls */
+    height: 30px;
 }
 
     
@@ -321,8 +346,15 @@
 
     <button id="toggle-instructions">‎ </button>
     <button id="toggle-music">Music: ON</button>
-    <button id="play-music">▶ Play Music</button>
-
+    <div id="audio-player">
+        <div id="audio-player">
+            <audio id="bg-music" controls loop>
+                <source src="ACDC - Shoot To Thrill (Iron Man 2 Version).mp3" type="audio/mp3">
+                Your browser does not support the audio element.
+            </audio>
+        </div>        
+    </div>
+    
     <div id="jarvis-instructions">
         <p>🔼 Up Arrow - Move Forward</p>
         <p>🔽 Down Arrow - Move Backward</p>
@@ -844,12 +876,6 @@ window.addEventListener('load', () => {
 });
 
 
-// Play music only after user clicks or touches the screen
-window.onload = () => {
-    document.addEventListener("click", enableAudio);
-    document.addEventListener("touchstart", enableAudio);
-};
-
 // Get the toggle button
 const toggleMusicButton = document.getElementById("toggle-music");
 
@@ -910,23 +936,6 @@ document.addEventListener("touchend", () => {
     isDragging = false;
 });
 
-let bgMusic = document.getElementById("bg-music");
-let playMusicButton = document.getElementById("play-music");
-
-// Function to play music when the button is clicked
-function playMusic() {
-    if (bgMusic) {
-        bgMusic.play().then(() => {
-            console.log("Music started!");
-            playMusicButton.style.display = "none"; // Hide the button after playing
-        }).catch(error => {
-            console.log("Music play failed:", error);
-        });
-    }
-}
-
-// Add event listener to the Play Music button
-playMusicButton.addEventListener("click", playMusic);
 
 
 
